@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Menu {
 
 	private static void clear() {
-		for (int i = 0; i < 10; ++i) System.out.println(); //change to 50
+		for (int i = 0; i < 100; ++i) System.out.println();
 		return;
 	}
 
@@ -629,6 +629,7 @@ public class Menu {
 															clear();
 															System.out.print("Wprowadź ID czytelnika: ");
 															id_czytelnika = Long.parseLong(input.nextLine());
+															if (b.getKsiazki().get(id_czytelnika) == null) throw new NumberFormatException();
 															clear();
 															b.wyswietlWypozyczeniaCzytelnika(id_czytelnika);
 															System.out.println("Wciśnij enter aby kontynuować ");

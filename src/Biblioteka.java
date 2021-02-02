@@ -30,6 +30,7 @@ public class Biblioteka implements Serializable {
 		this.id_ksiazki = 0;
 		this.id_wypozyczenia = 0;
 
+		///Odczyt z bazy danych
 		try {
         FileInputStream fis = new FileInputStream("ksiazki.ser");
 		ObjectInputStream ois = new ObjectInputStream(fis);
@@ -49,9 +50,9 @@ public class Biblioteka implements Serializable {
 		ois.close();
 		fis.close();
 
-		this.id_czytelnika = czytelnicy.lastKey();
-		this.id_ksiazki = ksiazki.lastKey();
-		this.id_wypozyczenia = wypozyczenia.lastKey();
+		this.id_czytelnika = czytelnicy.lastKey() + 1;
+		this.id_ksiazki = ksiazki.lastKey() + 1;
+		this.id_wypozyczenia = wypozyczenia.lastKey() + 1;
 		} catch (IOException | ClassNotFoundException | ClassCastException | NoSuchElementException e) {
 			System.out.println("Nie udało się odczytać bazy.");
 		}
@@ -63,15 +64,11 @@ public class Biblioteka implements Serializable {
 		System.out.println("+----+--------------+---------------------+");
 		System.out.println("| ID |     Imię     |     Nazwisko        |");
 		System.out.println("+----+--------------+---------------------+");
-                   // for (Czytelnik c: czytelnicy.values()) {
                     List<Czytelnik> czytelnicyImie = new ArrayList<>(czytelnicy.values());
                     Collections.sort(czytelnicyImie, Comparator.comparing(Czytelnik::getImie));
                         for (Czytelnik p : czytelnicyImie) {
-                        //System.out.println(c.getId() + "\t" + c.getImie() + "\t" + c.getNazwisko());
                         System.out.printf(format, (Object[]) p.toString().split("	"));
                         }
-			//System.out.printf(format, (Object[]) c.toString().split("	"));
-                    //}
 		System.out.println("+----+--------------+---------------------+");
 	}
         
@@ -81,15 +78,11 @@ public class Biblioteka implements Serializable {
 		System.out.println("+----+--------------+---------------------+");
 		System.out.println("| ID |     Imię     |     Nazwisko        |");
 		System.out.println("+----+--------------+---------------------+");
-                   // for (Czytelnik c: czytelnicy.values()) {
                     List<Czytelnik> czytelnicyImie = new ArrayList<>(czytelnicy.values());
                     Collections.sort(czytelnicyImie, Comparator.comparing(Czytelnik::getImie, reverseOrder()));
                         for (Czytelnik p : czytelnicyImie) {
-                        //System.out.println(c.getId() + "\t" + c.getImie() + "\t" + c.getNazwisko());
                         System.out.printf(format, (Object[]) p.toString().split("	"));
                         }
-			//System.out.printf(format, (Object[]) c.toString().split("	"));
-                    //}
 		System.out.println("+----+--------------+---------------------+");
 	}        
         
@@ -249,15 +242,27 @@ public class Biblioteka implements Serializable {
 
         ///Wyswietlanie wszystkich wypozyczen ksiazek.
 	public void wyswietlWypozyczenia() {
-		String format = "| %-2s | %-21s | %-25s | %-21s |%n";
-		System.out.println("+----+-----------------------+---------------------------+-----------------------+");
-		System.out.println("| ID |         Autor         |           Tytuł           |       Czytelnik       |");
-		System.out.println("+----+-----------------------+---------------------------+-----------------------+");
+		String format = "| %-2s | %-21s | %-25s | %-21s | %-21s | %-18s |%n";
+		System.out.println("+----+-----------------------+---------------------------+-----------------------+-----------------------+--------------------+");
+		System.out.println("| ID |         Autor         |           Tytuł           |       Czytelnik       |   Data wypożyczenia   |   Data do zwrotu   |");
+		System.out.println("+----+-----------------------+---------------------------+-----------------------+-----------------------+--------------------+");
 		for (Wypozyczenie w: wypozyczenia.values()) {
 			System.out.printf(format, (Object[]) w.toString().split("	"));
 		}
-		System.out.println("+----+-----------------------+---------------------------+-----------------------+");
+		System.out.println("+----+-----------------------+---------------------------+-----------------------+-----------------------+--------------------+");
 	}
+
+		///Wyswietlanie przeterminowanych wypozyczen ksiazek.
+		public void wyswietlPrzeterminowaneWypozyczenia() {
+			String format = "| %-2s | %-21s | %-25s | %-21s | %-21s | %-18s |%n";
+			System.out.println("+----+-----------------------+---------------------------+-----------------------+-----------------------+--------------------+");
+			System.out.println("| ID |         Autor         |           Tytuł           |       Czytelnik       |   Data wypożyczenia   |   Data do zwrotu   |");
+			System.out.println("+----+-----------------------+---------------------------+-----------------------+-----------------------+--------------------+");
+			for (Wypozyczenie w: wypozyczenia.values()) {
+				if (w.przeterminowane()) System.out.printf(format, (Object[]) w.toString().split("	"));
+			}
+			System.out.println("+----+-----------------------+---------------------------+-----------------------+-----------------------+--------------------+");
+		}
 
 	public SortedMap<Long, Ksiazka> getKsiazki() {
 		return ksiazki;
@@ -356,16 +361,16 @@ public class Biblioteka implements Serializable {
 
         ///Wyswietlanie wypozyczen wybranego czytelnika.
 	public void wyswietlWypozyczeniaCzytelnika (Long id_czytelnika) {
-		String format = "| %-2s | %-21s | %-25s | %-21s |%n";
-		System.out.println("+----+-----------------------+---------------------------+-----------------------+");
-		System.out.println("| ID |         Autor         |           Tytuł           |       Czytelnik       |");
-		System.out.println("+----+-----------------------+---------------------------+-----------------------+");
+		String format = "| %-2s | %-21s | %-25s | %-21s | %-21s | %-18s |%n";
+		System.out.println("+----+-----------------------+---------------------------+-----------------------+-----------------------+--------------------+");
+		System.out.println("| ID |         Autor         |           Tytuł           |       Czytelnik       |   Data wypożyczenia   |   Data do zwrotu   |");
+		System.out.println("+----+-----------------------+---------------------------+-----------------------+-----------------------+--------------------+");
 		for (Wypozyczenie w: wypozyczenia.values()) {
 			if (w.getCzytelnikID() == id_czytelnika) {
 				System.out.printf(format, (Object[]) w.toString().split("	"));
 			}
 		}
-		System.out.println("+----+-----------------------+---------------------------+-----------------------+");
+		System.out.println("+----+-----------------------+---------------------------+-----------------------+-----------------------+--------------------+");
 	}
 	
         ///Zapisywanie ksiazki do pliku
