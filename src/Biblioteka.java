@@ -50,9 +50,9 @@ public class Biblioteka implements Serializable {
 		ois.close();
 		fis.close();
 
-		this.id_czytelnika = czytelnicy.lastKey() + 1;
-		this.id_ksiazki = ksiazki.lastKey() + 1;
-		this.id_wypozyczenia = wypozyczenia.lastKey() + 1;
+		this.id_czytelnika = czytelnicy.lastKey();
+		this.id_ksiazki = ksiazki.lastKey();
+		this.id_wypozyczenia = wypozyczenia.lastKey();
 		} catch (IOException | ClassNotFoundException | ClassCastException | NoSuchElementException e) {
 			System.out.println("Nie udało się odczytać bazy.");
 		}
@@ -60,6 +60,7 @@ public class Biblioteka implements Serializable {
     }
         ///Wyswietlanie czytelnikow wedlug alfabetycznej kolejnosci imion.
 	public void wyswietlCzytelnikowImieAZ() {
+
 		String format = "| %-2s | %-12s | %-20s|%n";
 		System.out.println("+----+--------------+---------------------+");
 		System.out.println("| ID |     Imię     |     Nazwisko        |");
@@ -84,7 +85,7 @@ public class Biblioteka implements Serializable {
                         System.out.printf(format, (Object[]) p.toString().split("	"));
                         }
 		System.out.println("+----+--------------+---------------------+");
-	}        
+	}
         
         ///Wyswietlanie czytelnikow wedlug alfabetycznej kolejnosci nazwisk.
         public void wyswietlCzytelnikowNazwiskoAZ(){
@@ -112,7 +113,7 @@ public class Biblioteka implements Serializable {
                         System.out.printf(format, (Object[]) p.toString().split("	"));
                         }
 		System.out.println("+----+--------------+---------------------+");
-	}        
+	}
 
         ///Wyswietlanie czytelnikow wedlug rosnacej kolejnosci ID.
 	public void wyswietlCzytelnikowIDLOW() {
@@ -126,7 +127,7 @@ public class Biblioteka implements Serializable {
                         System.out.printf(format, (Object[]) c.toString().split("	"));
                         }
 		System.out.println("+----+--------------+---------------------+");
-	}        
+	}
 
         ///Wyswietlanie czytelnikow wedlug malejacej kolejnosci ID.
 	public void wyswietlCzytelnikowIDHIGH() {
@@ -140,10 +141,19 @@ public class Biblioteka implements Serializable {
                         System.out.printf(format, (Object[]) c.toString().split("	"));
                         }
 		System.out.println("+----+--------------+---------------------+");
-	}            
+	}
                 
         ///Wyswietlanie ksiazek wedlug odwrotnej alfabetycznej kolejnosci autorow.
 	public void wyswietlKsiazkiAutorAZ() {
+
+		for (Long treeKey : ksiazki.keySet()) {
+			String key = treeKey.toString();
+			String value = ksiazki.get(treeKey).toString();
+		
+			System.out.println("key: " + key + "Value: " + value);
+		}
+		
+
 		String format = "| %-21s | %-21s | %-17s | %-26s | %-3s|%n";
 		System.out.println("+-----------------------+-----------------------+-------------------+----------------------------+----+");
 		System.out.println("|         Autor         |         Tytuł         |         ISBN      | Egzemplarze,  wypożyczone  | ID |");
@@ -300,18 +310,6 @@ public class Biblioteka implements Serializable {
 		this.id_wypozyczenia = id_wypozyczenia;
 	}
 	
-	public long kolejny_numer_czytelnika() {
-		return id_czytelnika++;
-	}
-
-	public long kolejny_numer_ksiazki() {
-		return id_ksiazki++;
-	}
-
-	public long kolejny_numer_wypozyczenia() {
-		return id_wypozyczenia++;
-	}
-	
 	public void dodajKsiazke(Long id, Ksiazka k) {
 		ksiazki.put(id ,k);
 	}
@@ -339,7 +337,11 @@ public class Biblioteka implements Serializable {
         ///Wypozyczenie ksiazki.
 	public boolean wypozyczKsiazke(Long id_czytelnika, Long id_ksiazki) {
 		if (ksiazki.get(id_ksiazki).wypozycz() && !czytelnicy.get(id_czytelnika).zablokowany) {
-			dodajWypozyczenie(getNumer_wypozyczenia(), new Wypozyczenie(ksiazki.get(id_ksiazki), czytelnicy.get(id_czytelnika), kolejny_numer_wypozyczenia()));
+			try {
+			dodajWypozyczenie(wypozyczenia.lastKey()+1, new Wypozyczenie(ksiazki.get(id_ksiazki), czytelnicy.get(id_czytelnika), wypozyczenia.lastKey()+1));
+			} catch (NoSuchElementException e) {
+			dodajWypozyczenie((long) 0, new Wypozyczenie(ksiazki.get(id_ksiazki), czytelnicy.get(id_czytelnika), (long) 0)); //pierwszy element
+			}
 			return true;
 		} else 
 			return false;
@@ -348,7 +350,7 @@ public class Biblioteka implements Serializable {
         ///Zwracanie ksiazki.
 	public boolean zwrocKsiazke(Long id_wypozyczenia) {
 		try {
-			if (wypozyczenia.get(id_wypozyczenia).wypozyczona()) {
+			if (wypozyczenia.get(id_wypozyczenia).wypozyczona() && !wypozyczenia.get(id_wypozyczenia).getCzytelnik().zablokowany) {
 				wypozyczenia.get(id_wypozyczenia).getKsiazka().oddaj();
 				usunWypozyczenie(id_wypozyczenia);
 				return true;

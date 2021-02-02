@@ -1,3 +1,4 @@
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Menu {
@@ -204,8 +205,11 @@ public class Menu {
 
 									System.out.printf("%nPodaj ilość egzemplarzy: ");
 									ilosc_egzemplarzy = Integer.parseInt(input.nextLine());
-
-									b.dodajKsiazke(b.getNumer_ksiazki(), new Ksiazka(autor, tytul, isbn, ilosc_egzemplarzy, b.kolejny_numer_ksiazki()));
+									try {
+									b.dodajKsiazke(b.ksiazki.lastKey()+1, new Ksiazka(autor, tytul, isbn, ilosc_egzemplarzy, b.ksiazki.lastKey()+1));
+									} catch (NoSuchElementException e) {
+										b.dodajKsiazke((long) 0, new Ksiazka(autor, tytul, isbn, ilosc_egzemplarzy, (long) 0)); //pierwszy element
+									}
 									b.saveKsiazkiDB(b);
 									clear();
 									System.out.println("Dodano nową książkę.");
@@ -426,8 +430,11 @@ public class Menu {
 									
 								System.out.printf("%nPodaj nazwisko: ");
 								nazwisko = input.nextLine();
-
-								b.dodajCzytelnika(b.getNumer_czytelnika(), new Czytelnik(imie, nazwisko, b.kolejny_numer_czytelnika()));
+								try {
+								b.dodajCzytelnika(b.czytelnicy.lastKey()+1, new Czytelnik(imie, nazwisko, b.czytelnicy.lastKey()+1));
+								} catch (NoSuchElementException e) {
+									b.dodajCzytelnika((long) 0, new Czytelnik(imie, nazwisko, (long) 0)); //pierwszy element
+								}
 								b.saveCzytelnicyDB(b);
 								System.out.println("Dodano nowego czytelnika.");
 								System.out.print("Wciśnij enter aby kontynuować ");
@@ -676,55 +683,51 @@ public class Menu {
 					{
 						case "1" :
 						
-						System.out.print("Podaj imię autora: ");	
-						parametr = input.nextLine();
-					
-						b.wyszukajKsiazki(parametr,wybor);
-						System.out.print("Wciśnij enter aby kontynuować ");
-						input.nextLine();
-
-							break;
+							System.out.print("Podaj imię autora: ");	
+							parametr = input.nextLine();
 						
-						case "2" :
-						System.out.print("Podaj tytuł książki: ");
-						parametr = input.nextLine();
-					
-						b.wyszukajKsiazki(parametr,wybor);
-						System.out.print("Wciśnij enter aby kontynuować ");
-						input.nextLine();
-
-						break;
+							b.wyszukajKsiazki(parametr,wybor);
+							System.out.print("Wciśnij enter aby kontynuować ");
+							input.nextLine();
+							break;
+							
+							case "2" :
+							System.out.print("Podaj tytuł książki: ");
+							parametr = input.nextLine();
+						
+							b.wyszukajKsiazki(parametr,wybor);
+							System.out.print("Wciśnij enter aby kontynuować ");
+							input.nextLine();
+							break;
 
 						case "3" :
-						try {	
+							try {	
 
-						System.out.print("Podaj ilość egzemplarzy: ");
-						parametr = input.nextLine();
-						Integer.parseInt(parametr);
-					
-						b.wyszukajKsiazki(parametr,wybor);
-						System.out.print("Wciśnij enter aby kontynuować ");
-						input.nextLine();
-
-						} 
-						catch (NumberFormatException e) {
-							System.out.println("Niepoprawny parametr. ");
-							System.out.println("Wciśnij enter aby kontynuować ");
+							System.out.print("Podaj ilość egzemplarzy: ");
+							parametr = input.nextLine();
+							Integer.parseInt(parametr);
+						
+							b.wyszukajKsiazki(parametr,wybor);
+							System.out.print("Wciśnij enter aby kontynuować ");
 							input.nextLine();
-						}
 
-						break;
+							} 
+							catch (NumberFormatException e) {
+								System.out.println("Niepoprawny parametr. ");
+								System.out.println("Wciśnij enter aby kontynuować ");
+								input.nextLine();
+							}
+							break;
 					
 						case "4" :
-						System.out.print("Podaj kod ISBN: ");
-						parametr = input.nextLine();
-					
-						b.wyszukajKsiazki(parametr,wybor);
+							System.out.print("Podaj kod ISBN: ");
+							parametr = input.nextLine();
 						
-						System.out.print("Wciśnij enter aby kontynuować ");
-						input.nextLine();
+							b.wyszukajKsiazki(parametr,wybor);
 							
-						break;
+							System.out.print("Wciśnij enter aby kontynuować ");
+							input.nextLine();
+							break;
 
 						case "0" :
 							break;
