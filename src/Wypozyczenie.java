@@ -1,4 +1,3 @@
-//package Biblioteka;
 import java.io.Serializable;
 
 public class Wypozyczenie implements Serializable {
@@ -9,7 +8,6 @@ public class Wypozyczenie implements Serializable {
 	Czytelnik czytelnik;
 
 	public Wypozyczenie(Ksiazka ksiazka, Czytelnik czytelnik, long id) {
-		//super();
 		this.ksiazka = ksiazka;
 		this.czytelnik = czytelnik;
 		this.id = id;

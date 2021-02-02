@@ -8,14 +8,15 @@ public class Ksiazka implements Serializable {
 	private String isbn;
 	private int ilosc_egzemplarzy;
 	private int ilosc_wypozyczonych_egzemplarzy;
+	private long id;
 	
-	public Ksiazka(String autor, String tytul, String isbn, int ilosc_egzemplarzy) {
-		//super();
+	public Ksiazka(String autor, String tytul, String isbn, int ilosc_egzemplarzy, long id) {
 		this.autor = autor;
 		this.tytul = tytul;
 		this.isbn = isbn;
 		this.ilosc_egzemplarzy = ilosc_egzemplarzy;
 		this.ilosc_wypozyczonych_egzemplarzy = 0;
+		this.id = id;
 	}
 	
 	public String getAutor() {
@@ -58,6 +59,14 @@ public class Ksiazka implements Serializable {
 		this.ilosc_wypozyczonych_egzemplarzy = ilosc_wypozyczonych_egzemplarzy;
 	}
 
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
 	boolean wypozycz() {
 		if (ilosc_egzemplarzy - ilosc_wypozyczonych_egzemplarzy > 0) {
 			ilosc_wypozyczonych_egzemplarzy += 1;
@@ -82,6 +91,6 @@ public class Ksiazka implements Serializable {
 
 	@Override
 	public String toString() {
-		return autor + "	" + tytul + "	" + isbn + "	egz.: " + ilosc_egzemplarzy + ",      wyp.: " + ilosc_wypozyczonych_egzemplarzy;
+		return autor + "	" + tytul + "	" + isbn + "	egz.: " + ilosc_egzemplarzy + ",      wyp.: " + ilosc_wypozyczonych_egzemplarzy + "	" + Long.toString(id);
 	}
 }

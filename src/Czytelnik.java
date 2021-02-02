@@ -9,7 +9,6 @@ public class Czytelnik implements Serializable {
 	boolean zablokowany = false;
 
 	public Czytelnik(String imie, String nazwisko, long id) {
-		//super();
 		this.imie = imie;
 		this.nazwisko = nazwisko;
 		this.id = id;
