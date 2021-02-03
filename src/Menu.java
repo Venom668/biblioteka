@@ -55,9 +55,11 @@ public class Menu {
 									clear();
 									System.out.print("Wprowadź ID czytelnika: ");
 									id_czytelnika = Long.parseLong(input.nextLine());
+									if (b.getCzytelnicy().get(id_czytelnika) == null) throw new NumberFormatException();
 									
 									System.out.printf("%nWprowadź ID ksiazki: ");
 									id_ksiazki = Long.parseLong(input.nextLine());
+									if (b.getKsiazki().get(id_ksiazki) == null) throw new NumberFormatException();
 									clear();
 									if (b.wypozyczKsiazke(id_czytelnika, id_ksiazki)) {
 										b.saveWypozyczeniaDB(b);
@@ -795,7 +797,7 @@ public class Menu {
 									clear();
 									System.out.print("Wprowadź ID czytelnika: ");
 									id_czytelnika = Long.parseLong(input.nextLine());
-									if (b.getKsiazki().get(id_czytelnika) == null) throw new NumberFormatException();
+									if (b.getCzytelnicy().get(id_czytelnika) == null) throw new NumberFormatException();
 									clear();
 									b.wyswietlWypozyczeniaCzytelnika(id_czytelnika);
 									System.out.print("Wciśnij enter aby kontynuować ");

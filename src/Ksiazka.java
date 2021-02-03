@@ -76,7 +76,7 @@ public class Ksiazka implements Serializable {
 		historia.add(czytelnik.getImieINazwisko() + "	" + czytelnik.getPesel() + "	" + data_wypozyczenia.toString() + "	" + data_zwrotu.toString());
 	}
 
-	boolean wypozycz() {
+	public boolean wypozycz() {
 		if (ilosc_egzemplarzy - ilosc_wypozyczonych_egzemplarzy > 0) {
 			ilosc_wypozyczonych_egzemplarzy += 1;
 			return true;
@@ -85,12 +85,12 @@ public class Ksiazka implements Serializable {
 			return false;
 	}
 
-	boolean oddaj() {
+	public boolean oddaj() {
 			ilosc_wypozyczonych_egzemplarzy--;
 			return true;
 	}
 
-	boolean dostepna() {
+	public boolean dostepna() {
 		if (ilosc_egzemplarzy - ilosc_wypozyczonych_egzemplarzy > 0) {
 			return true;
 		}

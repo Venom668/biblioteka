@@ -76,6 +76,6 @@ public class Czytelnik implements Serializable {
 
 	@Override
 	public String toString() {
-		return id + "	" + imie + "	" + nazwisko + "	" + pesel;
+		return id + "	" + imie + "	" + nazwisko + "	" + pesel + "	" + (zablokowany() ? "Tak*" : "Nie");
 	}
 }
