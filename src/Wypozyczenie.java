@@ -5,20 +5,24 @@ public class Wypozyczenie implements Serializable {
 		
 	private static final long serialVersionUID = 1L;
 	private long id;
-	Ksiazka ksiazka;
-	Czytelnik czytelnik;
-	private LocalDate data_wypozyczenia, data_zwrotu;
+	private Ksiazka ksiazka;
+	private Czytelnik czytelnik;
+	private LocalDate data_wypozyczenia, termin_zwrotu;
 
 	public Wypozyczenie(Ksiazka ksiazka, Czytelnik czytelnik, long id) {
 		this.ksiazka = ksiazka;
 		this.czytelnik = czytelnik;
 		this.id = id;
 		this.data_wypozyczenia = LocalDate.now();
-		this.data_zwrotu = LocalDate.now().plusMonths(1);
+		this.termin_zwrotu = LocalDate.now().plusMonths(1);
 	}
 
 	public Ksiazka getKsiazka() {
 		return ksiazka;
+	}
+
+	public Long getKsiazkaID() {
+		return ksiazka.getId();
 	}
 
 	public void setKsiazka(Ksiazka ksiazka) {
@@ -49,12 +53,12 @@ public class Wypozyczenie implements Serializable {
 		return data_wypozyczenia;
 	}
 
-	public LocalDate getDataZwrotu() {
-		return data_zwrotu;
+	public LocalDate getTerminZwrotu() {
+		return termin_zwrotu;
 	}
 
 	public boolean przeterminowane() {
-		if (LocalDate.now().isAfter(data_zwrotu)) {
+		if (LocalDate.now().isAfter(termin_zwrotu)) {
 			return true;
 		} else {
 			return false;
@@ -63,11 +67,6 @@ public class Wypozyczenie implements Serializable {
 
 	@Override
 	public String toString() {
-		return Long.toString(id) + "	" + ksiazka.getAutor() + "	" + ksiazka.getTytul() + "	" + czytelnik.getImieINazwisko() + "	" + getDataWypozyczenia().toString() + "	" + getDataZwrotu().toString();
+		return Long.toString(id) + "	" + ksiazka.getAutor() + "	" + ksiazka.getTytul() + "	" + czytelnik.getImieINazwisko() + "	" + getDataWypozyczenia().toString() + "	" + getTerminZwrotu().toString();
 	}
-	
-	public boolean wypozyczona() {
-		return true;
-	}
-
 }

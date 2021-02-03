@@ -1,14 +1,14 @@
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Ksiazka implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-	private String autor;
-	private String tytul;
-	private String isbn;
-	private int ilosc_egzemplarzy;
-	private int ilosc_wypozyczonych_egzemplarzy;
+	private String autor, tytul, isbn;
+	private int ilosc_egzemplarzy, ilosc_wypozyczonych_egzemplarzy;
 	private long id;
+	private ArrayList<String> historia;
 	
 	public Ksiazka(String autor, String tytul, String isbn, int ilosc_egzemplarzy, long id) {
 		this.autor = autor;
@@ -17,6 +17,7 @@ public class Ksiazka implements Serializable {
 		this.ilosc_egzemplarzy = ilosc_egzemplarzy;
 		this.ilosc_wypozyczonych_egzemplarzy = 0;
 		this.id = id;
+		this.historia = new ArrayList<String>();
 	}
 	
 	public String getAutor() {
@@ -67,6 +68,14 @@ public class Ksiazka implements Serializable {
 		this.id = id;
 	}
 
+	public ArrayList<String> getHistoria() {
+		return historia;
+	}
+
+	public void addHistoria(Czytelnik czytelnik, LocalDate data_wypozyczenia, LocalDate data_zwrotu) {
+		historia.add(czytelnik.getImieINazwisko() + "	" + czytelnik.getPesel() + "	" + data_wypozyczenia.toString() + "	" + data_zwrotu.toString());
+	}
+
 	boolean wypozycz() {
 		if (ilosc_egzemplarzy - ilosc_wypozyczonych_egzemplarzy > 0) {
 			ilosc_wypozyczonych_egzemplarzy += 1;
@@ -77,7 +86,7 @@ public class Ksiazka implements Serializable {
 	}
 
 	boolean oddaj() {
-			ilosc_wypozyczonych_egzemplarzy -= 1;
+			ilosc_wypozyczonych_egzemplarzy--;
 			return true;
 	}
 
