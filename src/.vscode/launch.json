@@ -1,0 +1,27 @@
+{
+    "configurations": [
+    
+        {
+            "name": "g++ - Build and debug active file",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "C/C++11: g++ build active file",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "visualizerFile": "/home/daniel/.config/VSCodium/User/workspaceStorage/069a087fec87085877bfc7406cca466d/tonka3000.qtvsctools/qt.natvis.xml"
+        }
+    ]
+}
